@@ -153,6 +153,6 @@ func subscribeToMQ(ch chan uint64, c *core.Core, s storage.IStorage) {
 		if err != nil {
 			fmt.Println("SetBlockNumber error", err)
 		}
-		fmt.Printf("finished block number %d\n", num)
+		fmt.Printf("parsed block number %d\n", num)
 	}
 }
