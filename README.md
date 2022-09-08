@@ -8,7 +8,7 @@ Here is how it works
 1. Scaner receive the number and get transcation from the chain, and save to storage.
 1. API reads storage and provides data.
 
-API and the scanner must be able to stateless, so they can scale.
+API and the scanner must be stateless, so they can scale and are highly available.
 
 ## Diagrams
 
