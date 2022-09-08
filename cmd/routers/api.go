@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"eth/internal/services"
 	"eth/internal/structs"
-	"io/ioutil"
+	"io"
 	"net/http"
 )
 
@@ -45,14 +45,18 @@ func (s *Server) GetCurrentBlock(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Write(respByte)
+	_, err = w.Write(respByte)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 }
 
 // add address to observer
 // Subscribe(address string) bool
 func (s *Server) Subscribe(w http.ResponseWriter, r *http.Request) {
 
-	body, err := ioutil.ReadAll(r.Body)
+	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -81,7 +85,11 @@ func (s *Server) Subscribe(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Header().Add("Content-Type", "application/json")
-	w.Write(respByte)
+	_, err = w.Write(respByte)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 }
 
 // list of inbound or outbound transactions for an address
@@ -107,6 +115,10 @@ func (s *Server) GetTransactions(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Header().Add("Content-Type", "application/json")
-	w.Write(respByte)
+	_, err = w.Write(respByte)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 
 }

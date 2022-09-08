@@ -22,7 +22,10 @@ func main() {
 
 	svc := services.NewTransationSvc(s)
 
-	routers.NewServer(":8080", svc)
+	_, err := routers.NewServer(":8080", svc)
+	if err != nil {
+		panic(err)
+	}
 }
 
 // func scan(c *core.Core, s storage.IStorage) {
@@ -124,23 +127,32 @@ func subscribeToMQ(ch chan uint64, c *core.Core, s storage.IStorage) {
 			from := tx.From
 			hasSub, err := s.HasSubscriber(from)
 			if err != nil {
-				// TODO handle errors
+				fmt.Println("HasSubscriber error", err)
 			}
 			if hasSub {
-				s.AddTransation(from, tx)
+				err = s.AddTransation(from, tx)
+				if err != nil {
+					fmt.Println("AddTransation error", err)
+				}
 			}
 
 			to := tx.To
 			hasSub, err = s.HasSubscriber(to)
 			if err != nil {
-				// TODO handle errors
+				fmt.Println("HasSubscriber error", err)
 			}
 			if hasSub {
-				s.AddTransation(to, tx)
+				err = s.AddTransation(to, tx)
+				if err != nil {
+					fmt.Println("AddTransation error", err)
+				}
 			}
 		}
 
-		s.SetBlockNumber(num)
+		err = s.SetBlockNumber(num)
+		if err != nil {
+			fmt.Println("SetBlockNumber error", err)
+		}
 		fmt.Printf("finished block number %d\n", num)
 	}
 }

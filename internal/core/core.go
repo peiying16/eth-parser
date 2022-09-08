@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"eth/internal/config"
 	utils "eth/internal/utils"
-	"io/ioutil"
+	"io"
 	"net/http"
 )
 
@@ -149,7 +149,7 @@ func (c *Core) send(body []byte) ([]byte, error) {
 	}
 	defer resp.Body.Close()
 
-	result, err := ioutil.ReadAll(resp.Body)
+	result, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
 	}
